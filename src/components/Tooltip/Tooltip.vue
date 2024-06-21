@@ -63,7 +63,7 @@
         },
         methods: {
             onMouseEnter() {
-                if (this.timeoutId) clearTimeout(this.timeoutId)
+                if (this.timeoutId) clearTimeout(this.timeoutId);
                 this.timeoutId = setTimeout(() => {
                     this.show = true;
                     if (this.appendToBody) {
@@ -74,7 +74,7 @@
                 }, this.delay);
             },
             onMouseLeave() {
-                if (this.timeoutId) clearTimeout(this.timeoutId)
+                if (this.timeoutId) clearTimeout(this.timeoutId);
                 this.timeoutId = setTimeout(() => {
                     if (this.appendToBody) {
                         document.body.removeChild(this.$refs.label);
