@@ -57,15 +57,14 @@
         },
         data() {
             return {
-                mouseEntered: false,
+                timeoutId: undefined,
                 show: false,
             };
         },
         methods: {
             onMouseEnter() {
-                this.mouseEntered = true;
-                setTimeout(() => {
-                    if (!this.mouseEntered) return;
+                if (this.timeoutId) clearTimeout(this.timeoutId)
+                this.timeoutId = setTimeout(() => {
                     this.show = true;
                     if (this.appendToBody) {
                         this.$nextTick(() => {
@@ -75,9 +74,8 @@
                 }, this.delay);
             },
             onMouseLeave() {
-                this.mouseEntered = false;
-                setTimeout(() => {
-                    if (this.mouseEntered) return;
+                if (this.timeoutId) clearTimeout(this.timeoutId)
+                this.timeoutId = setTimeout(() => {
                     if (this.appendToBody) {
                         document.body.removeChild(this.$refs.label);
                     }
