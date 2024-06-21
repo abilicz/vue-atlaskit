@@ -7,12 +7,12 @@
                 <Popper v-if="show" ref="popper" :transition-delay="0"
                         :boundaries-element="boundariesElement"
                         :target-element="$refs.target" :placement="placement" :offset="offset">
-                    <span ref="label" class="label" :disabled="disabled" @mouseenter="onMouseEnter"
-                          @mouseleave="onMouseLeave">
-                        <slot name="label"></slot>
-                    </span>
                     <span v-if=label ref="label" class="label no-click" :disabled="disabled">
                        {{ label }}
+                    </span>
+                    <span v-else ref="label" class="label" :disabled="disabled" @mouseenter="onMouseEnter"
+                          @mouseleave="onMouseLeave">
+                        <slot name="label"></slot>
                     </span>
                 </Popper>
             </transition>
