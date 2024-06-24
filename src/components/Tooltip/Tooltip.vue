@@ -2,15 +2,21 @@
     <div class="tooltip">
         <div ref="target" class="target" @mouseenter="onMouseEnter"
              @mouseleave="onMouseLeave">
-            <slot/>
+            <slot />
+            <transition name="fade">
+                <Popper v-if="show" ref="popper" :transition-delay="0"
+                        :boundaries-element="boundariesElement"
+                        :target-element="$refs.target" :placement="placement" :offset="offset">
+                    <span v-if=label ref="label" class="label no-click" :disabled="disabled">
+                       {{ label }}
+                    </span>
+                    <span v-else ref="label" class="label" :disabled="disabled" @mouseenter="onMouseEnter"
+                          @mouseleave="onMouseLeave">
+                        <slot name="label"></slot>
+                    </span>
+                </Popper>
+            </transition>
         </div>
-        <transition name="fade">
-            <Popper v-if="show" ref="popper" :transition-delay="300"
-                    :boundaries-element="boundariesElement"
-                    :target-element="$refs.target" :placement="placement" :offset="offset">
-                <span ref="label" class="label" :disabled="disabled">{{ label }}</span>
-            </Popper>
-        </transition>
     </div>
 </template>
 
@@ -23,48 +29,58 @@
         props: {
             label: {
                 type: String,
-                required: true
             },
             placement: {
                 type: String,
-                default: 'bottom'
+                default: 'bottom',
             },
             disabled: {
                 type: Boolean,
-                default: false
+                default: false,
             },
             offset: {
                 type: String,
-                default: '0,5'
+                default: '0,5',
             },
             appendToBody: {
                 type: Boolean,
-                default: false
+                default: false,
             },
             boundariesElement: {
                 type: String,
-                default: 'viewport'
-            }
+                default: 'viewport',
+            },
+            delay: {
+                type: Number,
+                default: 0,
+            },
         },
         data() {
             return {
-                show: false
+                timeoutId: undefined,
+                show: false,
             };
         },
         methods: {
             onMouseEnter() {
-                this.show = true;
-                if (this.appendToBody) {
-                    this.$nextTick(() => {
-                        this.append();
-                    });
-                }
+                if (this.timeoutId) clearTimeout(this.timeoutId);
+                this.timeoutId = setTimeout(() => {
+                    this.show = true;
+                    if (this.appendToBody) {
+                        this.$nextTick(() => {
+                            this.append();
+                        });
+                    }
+                }, this.delay);
             },
             onMouseLeave() {
-                if (this.appendToBody) {
-                    document.body.removeChild(this.$refs.label);
-                }
-                this.show = false;
+                if (this.timeoutId) clearTimeout(this.timeoutId);
+                this.timeoutId = setTimeout(() => {
+                    if (this.appendToBody) {
+                        document.body.removeChild(this.$refs.label);
+                    }
+                    this.show = false;
+                }, this.delay);
             },
             append() {
                 document.body.appendChild(this.$refs.label);
@@ -73,8 +89,8 @@
                         this.$refs.popper.update();
                     }
                 }, 0);
-            }
-        }
+            },
+        },
     };
 </script>
 
@@ -92,10 +108,13 @@
     font-weight: 400;
     box-shadow: 0 1px 2px 1px rgba(0, 1, 0, 0.2);
     white-space: nowrap;
-    pointer-events: none;
     border-radius: 3px;
     background-color: var(--ds-background-neutral-bold, #172b4d);
     color: var(--ds-text-inverse, #FFF);
+}
+
+.no-click {
+    pointer-events: none;
 }
 
 .fade-enter-active,
