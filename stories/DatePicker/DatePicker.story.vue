@@ -1,6 +1,7 @@
 <template>
     <div class="wrapper">
-        <DatePicker v-model="date"/>
+        <DatePicker v-model="date" />
+        <DatePicker v-model="date" :disabled="true" />
     </div>
 </template>
 
@@ -17,3 +18,11 @@
         }
     };
 </script>
+
+<style scoped>
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+</style>
