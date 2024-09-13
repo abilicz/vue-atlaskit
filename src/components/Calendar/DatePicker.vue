@@ -1,9 +1,9 @@
 <template>
-    <div ref="date-picker" class="date-picker" @click.stop>
-        <TextField :is-focused="focused" :is-loading="isLoading" :disabled="isLoading"
+    <div ref="date-picker" class="date-picker" :class="{ 'date-picker-disabled': disabled }" @click.stop>
+        <TextField :is-focused="focused" :is-loading="isLoading" :disabled="disabled || isLoading"
                    :is-invalid="isInvalid" select @mousedown="toggle">
             <input ref="input" :value="formattedDate" type="text"
-                   width="50%" placeholder="e.g. 31/12/2018" :disabled="isLoading"
+                   width="50%" placeholder="e.g. 31/12/2018" :disabled="disabled || isLoading"
                    v-on="listeners" @keydown.enter="onEnter"
                    @input="onInput" @keyup.esc="onEsc"
                    @focus="onFocus" @blur="onBlur">
@@ -50,6 +50,10 @@
             dateFormat: {
                 type: String,
                 default: 'dd/MM/y'
+            },
+            disabled: {
+                type: Boolean,
+                default: false,
             },
             disabledRange: {
                 type: Object,
@@ -150,5 +154,9 @@
 <style scoped>
     .icon {
         padding-right: 8px;
+    }
+
+    .date-picker-disabled {
+      cursor: not-allowed;
     }
 </style>
