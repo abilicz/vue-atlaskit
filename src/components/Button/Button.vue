@@ -186,7 +186,7 @@ button[appearance="link"] {
 }
 
 button[appearance="link"]:not([disabled]):not([selected=true]):hover {
-    olor: var(--ds-link, #0065FF);
+    color: var(--ds-link, #0065FF);
     text-decoration: underline;
 }
 
